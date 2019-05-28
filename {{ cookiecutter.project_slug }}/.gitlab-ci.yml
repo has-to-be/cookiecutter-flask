@@ -1,0 +1,94 @@
+variables:
+  POSTGRES_DB: test
+  POSTGRES_USER: test
+  POSTGRES_PASSWORD: ''
+
+stages:
+  - style
+  - complexity
+  - test
+  - build
+
+style:
+  stage: style
+  image: python:3.6
+  before_script: &setup_dependencies
+    - pip install --user poetry
+    - ~/.local/bin/poetry install
+  script:
+    - ~/.local/bin/poetry run black {{ cookiecutter.project_slug }} tests
+  tags:
+    - docker
+
+complexity:package:
+  stage: complexity
+  image: python:3.6
+  before_script: *setup_dependencies
+  script:
+    - ~/.local/bin/poetry run radon cc {{ cookiecutter.project_slug }} -a -s
+    - ~/.local/bin/poetry run xenon -bB -mA -aA {{ cookiecutter.project_slug }}
+  tags:
+    - docker
+
+complexity:tests:
+  stage: complexity
+  image: python:3.6
+  before_script: *setup_dependencies
+  script:
+    - ~/.local/bin/poetry run radon cc tests -a -s
+    - ~/.local/bin/poetry run xenon -bB -mA -aA tests
+  tags:
+    - docker
+
+test:3.5:
+  stage: test
+  image: python:3.5
+  services: &service_dependencies
+    - postgres:11.2
+    - selenium/standalone-chrome
+  before_script: *setup_dependencies
+  script: &run_testsuite
+    - export {{ cookiecutter.project_slug|upper }}_TEST_DB='postgresql://test@postgres/test'
+    - export {{ cookiecutter.project_slug|upper }}_SELENIUM_HOST='selenium__standalone-chrome'
+    - >-
+      export {{ cookiecutter.project_slug|upper }}_LIVETEST_HOST=$(grep -Eo
+      '^[0-9\.]*\s+runner-[0-9a-f]+-project-[0-9a-f]+-concurrent-[0-9]+'
+      /etc/hosts | awk '{ print $1; }')
+    - ~/.local/bin/poetry run pytest
+  artifacts: &testsuite_artifacts
+    paths:
+      - htmlcov
+  tags:
+    - docker
+
+test:3.6:
+  stage: test
+  image: python:3.6
+  services: *service_dependencies
+  before_script: *setup_dependencies
+  script: *run_testsuite
+  artifacts: *testsuite_artifacts
+  tags:
+    - docker
+
+test:3.7:
+  stage: test
+  image: python:3.7
+  services: *service_dependencies
+  before_script: *setup_dependencies
+  script: *run_testsuite
+  artifacts: *testsuite_artifacts
+  tags:
+    - docker
+
+build:
+  stage: build
+  image: python:3.6
+  before_script: *setup_dependencies
+  script:
+    - ~/.local/bin/poetry build
+  artifacts:
+    paths:
+      - dist/
+  tags:
+    - docker

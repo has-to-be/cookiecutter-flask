@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: 'postgres:11.2'
+    container_name: '{{ cookiecutter.project_slug }}_postgres'
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data/'
+      - './docker/psql-init-scripts/:/docker-entrypoint-initdb.d'
+
+  chrome:
+    image: 'selenium/standalone-chrome'
+    container_name: '{{ cookiecutter.project_slug }}_chrome'
+    network_mode: host
+
+volumes:
+  pgdata:
