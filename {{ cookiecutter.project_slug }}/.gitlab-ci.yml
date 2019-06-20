@@ -51,8 +51,8 @@ test:3.5:
     - export {{ cookiecutter.project_slug|upper }}_TEST_DB='postgresql://test@postgres/test'
     - export {{ cookiecutter.project_slug|upper }}_SELENIUM_HOST='selenium__standalone-chrome'
     - >-
-      export {{ cookiecutter.project_slug|upper }}_LIVETEST_HOST=$(grep -Eo
-      '^[0-9\.]*\s+runner-[0-9a-f]+-project-[0-9a-f]+-concurrent-[0-9]+'
+      export {{ cookiecutter.project_slug|upper }}_LIVETEST_HOST=$(grep -Eio
+      '^[0-9\.]*\s+runner-[0-9a-z_-]+-project-[0-9]+-concurrent-[0-9]+'
       /etc/hosts | awk '{ print $1; }')
     - ~/.local/bin/poetry run pytest
   artifacts: &testsuite_artifacts
