@@ -55,8 +55,9 @@ test:3.5:
       /etc/hosts | awk '{ print $1; }')
     - ~/.local/bin/poetry run pytest
   coverage: &testsuite_coverage '/^TOTAL\s+(?:\d+\s+)+(\d+(?:\.\d+)?\%)$/'
-  artifacts: &testsuite_artifacts
-    paths:
+  artifacts:
+    name: '$CI_PROJECT_NAME-coverage-$CI_COMMIT_SHORT_SHA-py35'
+    paths: &testsuite_artifacts_paths
       - htmlcov
   tags:
     - docker
@@ -67,7 +68,9 @@ test:3.6:
   before_script: *setup_dependencies
   script: *run_testsuite
   coverage: *testsuite_coverage
-  artifacts: *testsuite_artifacts
+  artifacts:
+    name: '$CI_PROJECT_NAME-coverage-$CI_COMMIT_SHORT_SHA-py36'
+    paths: *testsuite_artifacts_paths
   tags:
     - docker
 
@@ -78,7 +81,9 @@ test:3.7:
   before_script: *setup_dependencies
   script: *run_testsuite
   coverage: *testsuite_coverage
-  artifacts: *testsuite_artifacts
+  artifacts:
+    name: '$CI_PROJECT_NAME-coverage-$CI_COMMIT_SHORT_SHA-py37'
+    paths: *testsuite_artifacts_paths
   tags:
     - docker
 
@@ -88,6 +93,7 @@ build:
   script:
     - ~/.local/bin/poetry build
   artifacts:
+    name: '$CI_PROJECT_NAME-build-$CI_COMMIT_SHORT_SHA'
     paths:
       - dist/
   tags:
