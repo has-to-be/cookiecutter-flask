@@ -1,3 +1,5 @@
+image: python:3.6
+
 variables:
   POSTGRES_DB: test
   POSTGRES_USER: test
@@ -11,7 +13,6 @@ stages:
 
 style:
   stage: style
-  image: python:3.6
   before_script: &setup_dependencies
     - pip install --user poetry
     - ~/.local/bin/poetry install
@@ -22,7 +23,6 @@ style:
 
 complexity:package:
   stage: complexity
-  image: python:3.6
   before_script: *setup_dependencies
   script:
     - ~/.local/bin/poetry run radon cc {{ cookiecutter.project_slug }} -a -s
@@ -32,7 +32,6 @@ complexity:package:
 
 complexity:tests:
   stage: complexity
-  image: python:3.6
   before_script: *setup_dependencies
   script:
     - ~/.local/bin/poetry run radon cc tests -a -s
@@ -63,7 +62,6 @@ test:3.5:
 
 test:3.6:
   stage: test
-  image: python:3.6
   services: *service_dependencies
   before_script: *setup_dependencies
   script: *run_testsuite
@@ -83,7 +81,6 @@ test:3.7:
 
 build:
   stage: build
-  image: python:3.6
   before_script: *setup_dependencies
   script:
     - ~/.local/bin/poetry build
