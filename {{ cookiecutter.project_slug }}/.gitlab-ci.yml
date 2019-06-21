@@ -92,6 +92,7 @@ build:
   before_script: *setup_dependencies
   script:
     - ~/.local/bin/poetry build
+  dependencies: []
   artifacts:
     name: '$CI_PROJECT_NAME-build-$CI_COMMIT_SHORT_SHA'
     paths:
