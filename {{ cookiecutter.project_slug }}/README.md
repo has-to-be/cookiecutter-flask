@@ -34,8 +34,8 @@
 
 ## Development Notes
 
-If you want to run the test suite inside of IntelliJ with enabled debugger, 
-you have to add `--no-cov` as `Additional Argument` (see 
-[StackOverflow Answer][2]).
+If you want to run the test suite inside PyCharm or IntelliJ with enabled
+debugger, you must add `--no-cov` as *Additional Argument* to the *Run/Debug
+Configuration* (see [this answer on StackOverflow][2]).
 
 [2]: https://stackoverflow.com/questions/40718760/unable-to-debug-in-pycharm-with-pytest
