@@ -1,3 +1,5 @@
+image: python:3.6
+
 variables:
   POSTGRES_DB: test
   POSTGRES_USER: test
@@ -11,7 +13,6 @@ stages:
 
 style:
   stage: style
-  image: python:3.6
   before_script: &setup_dependencies
     - pip install --user poetry
     - ~/.local/bin/poetry install
@@ -22,7 +23,6 @@ style:
 
 complexity:package:
   stage: complexity
-  image: python:3.6
   before_script: *setup_dependencies
   script:
     - ~/.local/bin/poetry run radon cc {{ cookiecutter.project_slug }} -a -s
@@ -32,7 +32,6 @@ complexity:package:
 
 complexity:tests:
   stage: complexity
-  image: python:3.6
   before_script: *setup_dependencies
   script:
     - ~/.local/bin/poetry run radon cc tests -a -s
@@ -55,19 +54,23 @@ test:3.5:
       '^[0-9\.]*\s+runner-[0-9a-z_-]+-project-[0-9]+-concurrent-[0-9]+'
       /etc/hosts | awk '{ print $1; }')
     - ~/.local/bin/poetry run pytest
-  artifacts: &testsuite_artifacts
-    paths:
+  coverage: &testsuite_coverage '/^TOTAL\s+(?:\d+\s+)+(\d+(?:\.\d+)?\%)$/'
+  artifacts:
+    name: '$CI_PROJECT_NAME-coverage-$CI_COMMIT_SHORT_SHA-py35'
+    paths: &testsuite_artifacts_paths
       - htmlcov
   tags:
     - docker
 
 test:3.6:
   stage: test
-  image: python:3.6
   services: *service_dependencies
   before_script: *setup_dependencies
   script: *run_testsuite
-  artifacts: *testsuite_artifacts
+  coverage: *testsuite_coverage
+  artifacts:
+    name: '$CI_PROJECT_NAME-coverage-$CI_COMMIT_SHORT_SHA-py36'
+    paths: *testsuite_artifacts_paths
   tags:
     - docker
 
@@ -77,17 +80,21 @@ test:3.7:
   services: *service_dependencies
   before_script: *setup_dependencies
   script: *run_testsuite
-  artifacts: *testsuite_artifacts
+  coverage: *testsuite_coverage
+  artifacts:
+    name: '$CI_PROJECT_NAME-coverage-$CI_COMMIT_SHORT_SHA-py37'
+    paths: *testsuite_artifacts_paths
   tags:
     - docker
 
 build:
   stage: build
-  image: python:3.6
   before_script: *setup_dependencies
   script:
     - ~/.local/bin/poetry build
+  dependencies: []
   artifacts:
+    name: '$CI_PROJECT_NAME-build-$CI_COMMIT_SHORT_SHA'
     paths:
       - dist/
   tags:
