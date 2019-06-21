@@ -1,13 +1,13 @@
 # {{ cookiecutter.project_title }}
 
 
-## Quickstart 
+## Quickstart
 
- 1. Make sure you have [Poetry][1] installed on you local system. 
+ 1. Make sure you have [Poetry][1] installed on you local system.
 
         $ curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python3
 
- 2. Create and activate a Python 3.5 (or higher) virtualenv if you haven't 
+ 2. Create and activate a Python 3.5 (or higher) virtualenv if you haven't
     done so yet.  Use your preferred virtualenv management tool, or leverage
     Python's built-in capabilities:
 
@@ -18,8 +18,8 @@
 
         $ poetry install
 
- 4. Launch the dockerized service dependencies, prepare the database
-    and fire up the built-in development web server:
+ 4. Launch the dockerized service dependencies, prepare the database, and fire
+    up the built-in development web server:
 
         $ docker-compose up -d
         $ {{ cookiecutter.project_slug }} db upgrade
