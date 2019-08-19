@@ -17,7 +17,7 @@ style:
     - pip install --user poetry
     - ~/.local/bin/poetry install
   script:
-    - ~/.local/bin/poetry run black {{ cookiecutter.project_slug }} tests
+    - ~/.local/bin/poetry run black --check --diff {{ cookiecutter.project_slug }} tests
   tags:
     - docker
 
