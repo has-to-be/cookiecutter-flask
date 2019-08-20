@@ -1,7 +1,8 @@
-# {{ cookiecutter.project_title }}
+{{ cookiecutter.project_title }}
+{{ "=" * cookiecutter.project_title|length }}
 
-
-## Quickstart
+Quickstart
+----------
 
  1. Make sure you have [Poetry][1] installed on you local system.
 
@@ -32,7 +33,8 @@
 [1]: https://poetry.eustace.io/
 
 
-## Development Notes
+Development Notes
+-----------------
 
 ### Git
 
