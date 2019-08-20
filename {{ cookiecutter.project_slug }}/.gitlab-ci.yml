@@ -1,3 +1,4 @@
+---
 image: python:3.6
 
 variables:
@@ -50,9 +51,9 @@ test:3.5:
     - export {{ cookiecutter.project_slug|upper }}_TEST_DB='postgresql://test@postgres/test'
     - export {{ cookiecutter.project_slug|upper }}_SELENIUM_HOST='selenium__standalone-chrome'
     - >-
-      export {{ cookiecutter.project_slug|upper }}_LIVETEST_HOST=$(grep -Eio
-      '^[0-9\.]*\s+runner-[0-9a-z_-]+-project-[0-9]+-concurrent-[0-9]+'
-      /etc/hosts | awk '{ print $1; }')
+        export {{ cookiecutter.project_slug|upper }}_LIVETEST_HOST=$(grep -Eio
+        '^[0-9\.]*\s+runner-[0-9a-z_-]+-project-[0-9]+-concurrent-[0-9]+'
+        /etc/hosts | awk '{ print $1; }')
     - ~/.local/bin/poetry run pytest
   coverage: &testsuite_coverage '/^TOTAL\s+(?:\d+\s+)+(\d+(?:\.\d+)?\%)$/'
   artifacts:
