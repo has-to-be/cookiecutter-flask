@@ -30,6 +30,8 @@ tox = "^3.8"
 black = {version = "^18.3-alpha.0",allows-prereleases = true,python = "^3.6"}
 xenon = "^0.5.5"
 selenium = "^3.141"
+pre-commit = "^1.18"
+yamllint = "^1.17"
 
 [tool.poetry.scripts]
 {{ cookiecutter.project_slug }} = '{{ cookiecutter.project_slug }}.cli:main'
