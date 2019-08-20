@@ -1,0 +1,7 @@
+---
+extends: default
+rules:
+  indentation:
+    check-multi-line-strings: true
+  line-length:
+    max: 79

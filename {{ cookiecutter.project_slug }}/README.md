@@ -1,7 +1,8 @@
-# {{ cookiecutter.project_title }}
+{{ cookiecutter.project_title }}
+{{ "=" * cookiecutter.project_title|length }}
 
-
-## Quickstart
+Quickstart
+----------
 
  1. Make sure you have [Poetry][1] installed on you local system.
 
@@ -32,7 +33,20 @@
 [1]: https://poetry.eustace.io/
 
 
-## Development Notes
+Development Notes
+-----------------
+
+### Git
+
+You can install a Git pre-commit hook that will automatically check the code
+style every time you run `git commit`:
+
+    $ pre-commit install
+
+Once installed, `git commit` will abort if any check fails.
+
+
+### PyCharm/IntelliJ IDEA Integration
 
 If you want to run the test suite inside PyCharm or IntelliJ with enabled
 debugger, you must add `--no-cov` as *Additional Argument* to the *Run/Debug

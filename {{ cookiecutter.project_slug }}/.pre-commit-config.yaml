@@ -1,0 +1,36 @@
+---
+repos:
+  - repo: local
+    hooks:
+      - id: xenon/app
+        name: 'Xenon Code Complexity Checking (app)'
+        language: system
+        entry: xenon -bB -mA -aA stationmapper
+        types: [python]
+        pass_filenames: false
+
+      - id: xenon/tests
+        name: 'Xenon Code Complexity Checking (tests)'
+        language: system
+        entry: xenon -bB -mA -aA tests
+        types: [python]
+        pass_filenames: false
+
+      - id: flake8
+        name: 'Flake8 Style Guide Checking'
+        language: system
+        entry: flake8
+        types: [python]
+
+      - id: black
+        name: 'Black Code Formatting'
+        language: system
+        entry: black --check --diff
+        types: [python]
+        require_serial: true
+
+      - id: yamllint
+        name: 'YAML Linting'
+        language: system
+        entry: yamllint
+        types: [yaml]
