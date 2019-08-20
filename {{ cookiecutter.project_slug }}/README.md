@@ -34,6 +34,18 @@
 
 ## Development Notes
 
+### Git
+
+You can install a Git pre-commit hook that will automatically check the code
+style every time you run `git commit`:
+
+    $ pre-commit install
+
+Once installed, `git commit` will abort if any check fails.
+
+
+### PyCharm/IntelliJ IDEA Integration
+
 If you want to run the test suite inside PyCharm or IntelliJ with enabled
 debugger, you must add `--no-cov` as *Additional Argument* to the *Run/Debug
 Configuration* (see [this answer on StackOverflow][2]).
