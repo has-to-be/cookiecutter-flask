@@ -5,7 +5,7 @@ repos:
       - id: xenon/app
         name: 'Xenon Code Complexity Checking (app)'
         language: system
-        entry: xenon -bB -mA -aA stationmapper
+        entry: xenon -bB -mA -aA {{ cookiecutter.project_slug }}
         types: [python]
         pass_filenames: false
 
