@@ -30,6 +30,7 @@ SQLALCHEMY_DATABASE_URI = "postgresql://postgres@localhost/postgres"
 # Sentry settings
 # ---------------
 # SENTRY_DSN = "<protocol>://<key>@<host>/<project>"
+SENTRY_ENVIRONMENT = "development"
 
 
 # Application-internal configuration
