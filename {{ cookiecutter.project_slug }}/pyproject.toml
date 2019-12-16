@@ -27,7 +27,7 @@ pytest-cov = "^2.6"
 pytest-flake8 = "^1.0"
 python-dotenv = "^0.10.1"
 tox = "^3.8"
-black = {version = "^18.3-alpha.0",allows-prereleases = true,python = "^3.6"}
+black = {version = "^18.3-alpha.0",allow-prereleases = true,python = "^3.6"}
 xenon = "^0.5.5"
 selenium = "^3.141"
 pre-commit = "^1.18"
@@ -63,5 +63,5 @@ commands =
 """
 
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry>=1.0.0"]
 build-backend = "poetry.masonry.api"
