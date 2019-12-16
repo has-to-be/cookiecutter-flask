@@ -28,9 +28,9 @@ for dependency management.
 $ curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python3
 ```
 
-This Cookiecutter has been tested with Poetry 0.12.14.  If you happen to have
-an older version of Poetry installed on your system, you might want to update
-it first to the latest version by running:
+This Cookiecutter requires at least Poetry version 1.0.0.  If you happen to
+have a pre-1.0 version of Poetry installed on your system, please update it
+first to the latest version by running:
 
 ```console
 $ poetry self:update

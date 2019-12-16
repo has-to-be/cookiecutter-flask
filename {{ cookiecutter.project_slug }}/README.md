@@ -4,7 +4,8 @@
 Quickstart
 ----------
 
- 1. Make sure you have [Poetry][1] installed on you local system.
+ 1. Make sure you have [Poetry][1] 1.0.0 or higher installed on you local
+    system:
 
         $ curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python3
 
