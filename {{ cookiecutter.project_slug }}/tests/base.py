@@ -7,13 +7,13 @@ import time
 
 import coverage
 from flask_testing import LiveServerTestCase
-from selenium import webdriver
+from selenium.webdriver import Remote
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from {{ cookiecutter.project_slug }}.tests.base import clean_db, create_test_app, init_db
 
 
-live_host = os.environ.get("{{ cookiecutter.project_slug|upper }}_LIVETEST_HOST", "127.0.0.1")
+live_host = os.environ.get("{{ cookiecutter.project_slug|upper }}_LIVETEST_HOST", "web")
 
 
 class FunctionalTest(LiveServerTestCase):
@@ -22,13 +22,14 @@ class FunctionalTest(LiveServerTestCase):
     def create_app(self):
         """Create the test server application instance."""
         coverage.process_startup()
-        app = create_test_app(LIVESERVER_PORT=0)
+        app = create_test_app()
         selenium_server_url = "http://{}:{}/wd/hub".format(
-            os.environ.get("{{ cookiecutter.project_slug|upper }}_SELENIUM_HOST", "127.0.0.1"),
+            os.environ.get("{{ cookiecutter.project_slug|upper }}_SELENIUM_HOST", "chrome"),
             os.environ.get("{{ cookiecutter.project_slug|upper }}_SELENIUM_PORT", "4444"),
         )
-        self.browser = webdriver.Remote(
-            selenium_server_url, DesiredCapabilities.CHROME
+        self.browser = Remote(
+            command_executor=selenium_server_url,
+            desired_capabilities=DesiredCapabilities.CHROME.copy(),
         )
         self.browser.implicitly_wait(3)
         return app

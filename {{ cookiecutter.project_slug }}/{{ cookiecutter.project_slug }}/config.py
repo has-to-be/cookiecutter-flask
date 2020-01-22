@@ -24,7 +24,7 @@ SESSION_COOKIE_NAME = "{{ cookiecutter.project_slug }}"
 
 # Flask-SQLAlchemy settings
 # -------------------------
-SQLALCHEMY_DATABASE_URI = "postgresql://postgres@localhost/postgres"
+SQLALCHEMY_DATABASE_URI = "postgresql://postgres@postgres/postgres"
 
 
 # Sentry settings

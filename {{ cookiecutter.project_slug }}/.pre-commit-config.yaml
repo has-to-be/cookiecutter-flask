@@ -4,33 +4,33 @@ repos:
     hooks:
       - id: xenon/app
         name: 'Xenon Code Complexity Checking (app)'
-        language: system
-        entry: xenon -bB -mA -aA {{ cookiecutter.project_slug }}
+        language: docker_image
+        entry: {{ cookiecutter.project_slug }} xenon -bB -mA -aA {{ cookiecutter.project_slug }}
         types: [python]
         pass_filenames: false
 
       - id: xenon/tests
         name: 'Xenon Code Complexity Checking (tests)'
-        language: system
-        entry: xenon -bB -mA -aA tests
+        language: docker_image
+        entry: {{ cookiecutter.project_slug }} xenon -bB -mA -aA tests
         types: [python]
         pass_filenames: false
 
       - id: flake8
         name: 'Flake8 Style Guide Checking'
-        language: system
-        entry: flake8
+        language: docker_image
+        entry: {{ cookiecutter.project_slug }} flake8
         types: [python]
 
       - id: black
         name: 'Black Code Formatting'
-        language: system
-        entry: black --check --diff
+        language: docker_image
+        entry: {{ cookiecutter.project_slug }} black --check --diff
         types: [python]
         require_serial: true
 
       - id: yamllint
         name: 'YAML Linting'
-        language: system
-        entry: yamllint
+        language: docker_image
+        entry: {{ cookiecutter.project_slug }} yamllint
         types: [yaml]

@@ -1,0 +1,10 @@
+# Files and directories that shall not be added to the image created by the
+# Dockerfile in this directory.  For reference, consult
+# https://docs.docker.com/engine/reference/builder/#dockerignore-file
+
+# Python cache files and directories
+**/*.pyc
+**/__pycache__
+
+# Git files
+/.git
