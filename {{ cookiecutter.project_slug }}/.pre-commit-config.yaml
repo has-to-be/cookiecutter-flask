@@ -12,6 +12,10 @@ repos:
     rev: v1.2.3
     hooks:
       - id: flake8
+        additional_dependencies: [
+          'flake8-docstrings==1.5.0',
+          'flake8-import-order==0.18.1',
+        ]
         name: 'Flake8 Style Guide Checking'
         types: [python]
 
