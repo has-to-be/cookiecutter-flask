@@ -15,6 +15,41 @@ import os
 #
 # Put your own application-specific settings here.
 
+# Configure logging
+{{ cookiecutter.project_slug|upper }}_LOGGING = {
+    "version": 1,
+    "formatters": {
+        "default": {
+            "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+        },
+        # # for production, contemplate using JSONified log messages
+        # "json": {
+        #     "class": "{{ cookiecutter.project_slug }}.logging.CustomJsonFormatter",
+        #     "format": (
+        #         "(datetime) (level) (logger) (message) "
+        #         "(source) (lineno) (function)"
+        #     ),
+        # },
+    },
+    "handlers": {
+        "stream": {
+            "class": "logging.StreamHandler",
+            "level": "DEBUG",
+            "formatter": "default",
+            "stream": "ext://sys.stdout",
+        }
+    },
+    "loggers": {
+        "{{ cookiecutter.project_slug }}": {
+            "level": "DEBUG",
+            "propagate": False,
+            "handlers": ["stream"],
+        },
+        # # Enable SQL statement logging
+        # "sqlalchemy.engine": {"level": "INFO"},
+    },
+    "root": {"level": "INFO", "handlers": ["stream"]},
+}
 
 # Flask settings
 # --------------
@@ -42,4 +77,7 @@ SENTRY_ENVIRONMENT = "development"
 
 # Flask-SQLAlchemy settings
 # -------------------------
+# Set the ``sqlalchemy.engine`` logger’s log level to ``INFO`` or
+# ``DEBUG`` if you want to see the executed SQL statements.
+SQLALCHEMY_ECHO = False
 SQLALCHEMY_TRACK_MODIFICATIONS = False
