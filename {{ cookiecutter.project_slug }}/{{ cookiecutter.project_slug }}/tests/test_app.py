@@ -53,7 +53,7 @@ def test_create_app_with_non_existing_conffile(capsys):
     """
     conffile = "/this/path/does/not/exist"
     with pytest.raises(SystemExit):
-        app = create_app(conffile)  # noqa: F841
+        create_app(conffile)
     stdout, stderr = capsys.readouterr()
     assert stderr == "Cannot read config file: {}\n".format(conffile)
 
@@ -67,7 +67,7 @@ def test_create_app_with_invalid_conffile(capsys, tmpdir):
     conffile = tmpdir.join("myconfig.py")
     conffile.write('SECRET_KEY = "missingclosingquote')
     with pytest.raises(Exception):
-        app = create_app(str(conffile))  # noqa: F841
+        create_app(str(conffile))
     stdout, stderr = capsys.readouterr()
     assert stderr == "Cannot load config file: {}\n".format(conffile)
 
@@ -191,11 +191,11 @@ def test_create_app_with_conffile_and_envvar_and_kwargs(
     assert app.config["SESSION_COOKIE_NAME"] == conf_cookie_name
 
 
-def test_create_app_with_sentry_initializiation():
-    """Test Sentry initializiation during app creation."""
+def test_create_app_with_sentry_initialization():
+    """Test Sentry initialization during app creation."""
     assert sentry.dsn is None
     dsn = "http://key@sentry.example.com/project"
-    app = create_app(SENTRY_DSN=dsn)  # noqa: F841
+    create_app(SENTRY_DSN=dsn)
     assert sentry.dsn == dsn
 
 

@@ -2,6 +2,8 @@
 
 import os
 
+import pkg_resources
+
 # Customizable configuration
 # ==========================
 #
@@ -29,8 +31,11 @@ SQLALCHEMY_DATABASE_URI = "postgresql://postgres@localhost/postgres"
 
 # Sentry settings
 # ---------------
+#: A valid DSN for enabling Sentry integration.  If omitted, Sentry
+#: integration will be disabled.
 # SENTRY_DSN = "<protocol>://<key>@<host>/<project>"
 SENTRY_ENVIRONMENT = "development"
+SENTRY_RELEASE = pkg_resources.get_distribution("{{ cookiecutter.project_slug }}").version
 
 
 # Application-internal configuration
