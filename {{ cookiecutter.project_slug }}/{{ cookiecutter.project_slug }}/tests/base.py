@@ -38,8 +38,10 @@ class TestCaseBase(TestCase):
     """Base class for unit tests."""
 
     def create_app(self, **config):
-        """Create an application instance."""
-        return create_test_app(**config)
+        """Create an application instance and a shortcut to a CLI runner."""
+        app = create_test_app(**config)
+        self.cli_runner = app.test_cli_runner()
+        return app
 
     def setUp(self):
         """Initialize the database."""
