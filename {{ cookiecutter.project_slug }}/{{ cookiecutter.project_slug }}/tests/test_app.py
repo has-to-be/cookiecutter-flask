@@ -199,15 +199,15 @@ def test_create_app_with_sentry_initialization():
     assert sentry.dsn == dsn
 
 
-def test_create_app_sqlalchemy_echo_if_debug_mode():
-    """Test that ``SQLALCHEMY_ECHO`` is set by default in debug mode."""
-    app = create_app(DEBUG=True)
-    assert app.config["SQLALCHEMY_ECHO"] is True
-
-
-def test_create_app_sqlalchemy_echo_if_not_debug_mode():
+def test_create_app_sqlalchemy_echo_default():
     """Test that ``SQLALCHEMY_ECHO`` is not set by default."""
-    app = create_app(DEBUG=False)
+    app = create_app()
+    assert app.config["SQLALCHEMY_ECHO"] is False
+
+
+def test_create_app_sqlalchemy_echo_debug_mode():
+    """Test that ``SQLALCHEMY_ECHO`` is not set by default in debug mode."""
+    app = create_app(DEBUG=True)
     assert app.config["SQLALCHEMY_ECHO"] is False
 
 

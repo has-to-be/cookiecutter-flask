@@ -4,10 +4,12 @@ This module provides the :func:`create_app` function to create a new
 application instance.
 """
 
+import logging.config
 import os
 import sys
 
 from flask import Flask
+from flask.logging import default_handler
 
 from .db import db, migrate
 from .main import main as main_blueprint
@@ -54,6 +56,11 @@ def create_app(config=None, **kwargs):
 
     # Override config with values from kwargs
     app.config.update(kwargs_config)
+
+    # Initialize logging
+    if "{{ cookiecutter.project_slug|upper }}_LOGGING" in app.config:
+        app.logger.removeHandler(default_handler)
+        logging.config.dictConfig(app.config["{{ cookiecutter.project_slug|upper }}_LOGGING"])
 
     # Initialize extensions
     initialize_extensions(app)
