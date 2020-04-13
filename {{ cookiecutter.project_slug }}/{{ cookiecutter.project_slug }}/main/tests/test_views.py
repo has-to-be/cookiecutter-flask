@@ -13,7 +13,7 @@ class TestIndexView(TestCaseBase):
         response = self.client.get("/")
         message = response.get_data().decode()
         assert response.mimetype == "text/plain"
-        assert "{{ cookiecutter.project_title }}" in message
+        assert "{{ cookiecutter.project_title|replace('"', '\\"') }}" in message
 
 
 class TestHealthcheck(TestCaseBase):

@@ -8,7 +8,7 @@ from .blueprint import main
 @main.route("/")
 def index():
     """Show a plain text welcome message."""
-    message = "This is {{ cookiecutter.project_title }}!\n"
+    message = "This is {{ cookiecutter.project_title|replace('"', '\\"') }}!\n"
     response = Response(message, mimetype="text/plain")
     return response
 

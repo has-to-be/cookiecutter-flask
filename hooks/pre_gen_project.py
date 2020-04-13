@@ -7,7 +7,7 @@ errors = []
 
 # Validate the Project’s title, which must be at most 50 characters long.
 
-project_title = "{{ cookiecutter.project_title }}"
+project_title = "{{ cookiecutter.project_title|replace('"', '\\"') }}"
 
 if len(project_title) < 1:
     errors.append("Project title is too short.")
