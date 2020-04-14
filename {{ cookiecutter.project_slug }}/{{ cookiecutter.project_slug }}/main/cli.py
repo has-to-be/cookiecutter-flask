@@ -9,5 +9,5 @@ from .blueprint import main
 @click.argument("name", default="World")
 def welcome(name):
     """Print a “Welcome” message."""
-    message = "Welcome to {{ cookiecutter.project_title }}, {}!".format(name)
+    message = "Welcome to {{ cookiecutter.project_title|replace('"', '\\"') }}, {}!".format(name)
     click.echo(message)
