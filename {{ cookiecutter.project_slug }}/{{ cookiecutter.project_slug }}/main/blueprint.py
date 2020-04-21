@@ -3,6 +3,6 @@
 from flask import Blueprint
 
 
-main = Blueprint("main", __name__)
+main = Blueprint("main", __name__, cli_group=None)
 
-from . import views  # noqa: F401, I100, I202
+from . import cli, views  # noqa: F401, I100, I202
