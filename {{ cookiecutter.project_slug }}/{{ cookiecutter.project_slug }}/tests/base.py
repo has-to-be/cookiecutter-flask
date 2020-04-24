@@ -16,7 +16,7 @@ def create_test_app(**config):
     ``True`` and using the Docker test database.
     """
     test_db = os.environ.get(
-        "{{ cookiecutter.project_slug|upper }}_TEST_DB", "postgresql://test@localhost/test"
+        "{{ cookiecutter.project_slug|upper }}_TEST_DB", "postgresql://test@postgres/test"
     )
     test_config = {"TESTING": True, "SQLALCHEMY_DATABASE_URI": test_db}
     test_config.update(**config)

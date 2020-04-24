@@ -3,12 +3,8 @@ Flask Cookiecutter
 
 A [Cookiecutter][1] template for [Flask][2] projects.
 
-Python 3.5 is the minimum required Python version to be able to run the Flask
-project; for development purposes, however, it is recommended to use
-Python 3.6.
-
 [1]: https://cookiecutter.readthedocs.io/en/latest/
-[2]: http://flask.pocoo.org/
+[2]: https://flask.palletsprojects.com/
 
 
 Prerequisites
@@ -21,28 +17,15 @@ straightforward via pip:
 $ pip3 install --user cookiecutter
 ```
 
-Additionally, the Flask project provided by this Cookiecutter uses [Poetry][3]
-for dependency management.
+Additionally, you will need [Docker][3] in order to run the Flask project.
 
-```console
-$ curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python3
-```
-
-This Cookiecutter requires at least Poetry version 1.0.0.  If you happen to
-have a pre-1.0 version of Poetry installed on your system, please update it
-first to the latest version by running:
-
-```console
-$ poetry self:update
-```
-
-[3]: https://poetry.eustace.io/
+[3]: https://www.docker.com/
 
 
 Quickstart
 ----------
 
-Starting a new Flask project with this Cookiecutter is straightforward:
+Starting a new Flask project with this Cookiecutter is dead simple:
 
 ```console
 $ cookiecutter https://github.com/has-to-be/cookiecutter-flask.git
@@ -54,12 +37,11 @@ character.  You will also be asked for an optional project description as well
 as author information.
 
 Once all steps are done, you will end up with a new directory named after the
-project slug.  Change into that directory, create and activate a new Python 3
-virtualenv (if you haven’t already), and install all dependencies:
+project slug.  Change into that directory and launch the service with the
+built-in Flask development server:
 
 ```console
-$ poetry install
+$ docker-compose up -d
 ```
 
-That’s it!  Now execute `flask run` or even `<project_slug> run` to launch the
-Flask development server, and start developing.
+That’s it!

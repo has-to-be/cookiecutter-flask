@@ -2,19 +2,37 @@
 version: '3.1'
 
 services:
+  web:
+    build: .
+    image: {{ cookiecutter.project_slug }}:latest
+    ports:
+      - '5000:5000'
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgres
+    networks:
+      - default
+      - api
+
   postgres:
     image: 'postgres:11.2'
-    container_name: '{{ cookiecutter.project_slug }}_postgres'
     ports:
-      - '127.0.0.1:5432:5432'
+      - '5432:5432'
     volumes:
       - 'pgdata:/var/lib/postgresql/data/'
       - './docker/psql-init-scripts/:/docker-entrypoint-initdb.d'
+    networks:
+      - default
 
   chrome:
     image: 'selenium/standalone-chrome'
-    container_name: '{{ cookiecutter.project_slug }}_chrome'
-    network_mode: host
+    networks:
+      - default
 
 volumes:
   pgdata:
+
+networks:
+  default:  # used for intra-service communication
+  api:  # allows other services to call the web service’s API
