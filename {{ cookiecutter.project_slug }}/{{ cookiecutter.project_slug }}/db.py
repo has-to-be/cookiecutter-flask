@@ -23,12 +23,3 @@ migrations_dir = os.path.join(os.path.dirname(__file__), "migrations")
 
 db = SQLAlchemy()
 migrate = Migrate(db=db, directory=migrations_dir)
-
-
-class ReprMixin:
-    """Mixin for generic representation strings for database models."""
-
-    def __repr__(self):
-        obj_id = getattr(self, "id", None)
-        identifier = "#{}".format(obj_id) if obj_id else hex(hash(id(self)))
-        return "<{} {}>".format(self.__class__.__name__, identifier)
