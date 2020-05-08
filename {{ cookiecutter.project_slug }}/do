@@ -1,0 +1,117 @@
+#!/usr/bin/env python3
+"""A simple command line toolbox for frequently used commands."""
+
+import functools
+import os
+import subprocess
+import sys
+
+
+tasks = {}
+
+
+def task(func):
+    """Register a function as a task."""
+    tasks[func.__name__] = func
+    # Return the original function unchanged
+    return func
+
+
+def launcher(service=None):
+    """Launch a command, potentially inside a Docker container."""
+
+    def decorator(func):
+        @task
+        @functools.wraps(func)
+        def wrapper(*args):
+            command = func(*args)
+            if service:
+                command = ["docker-compose", "run", "--rm", service] + command
+            os.chdir(os.path.dirname(__file__))
+            os.environ["DOCKER_USER"] = f"{os.getuid()}:{os.getgid()}"
+            os.execvp(command[0], command)
+
+        return wrapper
+
+    return decorator
+
+
+@task
+def help(*args):
+    """Print a help message."""
+    script_name = os.path.basename(__file__)
+    print(f"Usage: {script_name} <command> [<args>...]\n")
+    for task in sorted(tasks):
+        description = tasks[task].__doc__.splitlines()[0]
+        if len(task) <= 8:
+            output = f"  {task:<8}  {description}"
+        else:
+            output = f"  {task}\n            {description}"
+        print(output)
+
+
+@launcher()
+def up(*args):
+    """Start all Dockerized services."""
+    return ["docker-compose", "up"] + list(args)
+
+
+@launcher()
+def stop(*args):
+    """Stop all Dockerized services."""
+    return ["docker-compose", "stop"] + list(args)
+
+
+@launcher()
+def attach():
+    """Attach to the running service inside the ``web`` Docker container."""
+    result = subprocess.run(
+        ["docker-compose", "ps", "-q", "web"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=True,
+        encoding="utf-8",
+    )
+    container_id = result.stdout.strip()
+    print(f'Attaching to service "web".  Press Ctrl-P Ctrl-Q to exit.')
+    return ["docker", "attach", container_id]
+
+
+@launcher("web")
+def test(*args):
+    """Run the test suite."""
+    args = list(args)
+    # Use the IPython debugger by default
+    if "--pdb" in args:
+        if not any(arg for arg in args if arg.startswith("--pdbcls")):
+            args.insert(
+                args.index("--pdb") + 1,
+                "--pdbcls=IPython.terminal.debugger:TerminalPdb",
+            )
+    return ["pytest"] + list(args)
+
+
+@launcher("postgres")
+def psql(*args):
+    """Run the PostgreSQL command line interface."""
+    return ["psql", "-h", "postgres", "-U", "postgres"] + list(args)
+
+
+@launcher("postgres")
+def pg_dump(*args):
+    """Run the ``pg_dump`` command line utility."""
+    return ["pg_dump", "-h", "postgres", "-U", "postgres"] + list(args)
+
+
+if __name__ == "__main__":
+    try:
+        command = sys.argv[1]
+    except IndexError:
+        # If no command was given, run `help` by default
+        command = "help"
+    try:
+        task = tasks[command]
+    except KeyError:
+        # If task was not found, run the command inside a “web” Container
+        task = launcher("web")(lambda *args: [command] + list(args))
+    task(*sys.argv[2:])

@@ -9,6 +9,9 @@ services:
       - '5000:5000'
     volumes:
       - .:/usr/src/app
+    user: $DOCKER_USER
+    stdin_open: true
+    tty: true
     depends_on:
       - postgres
     networks:
