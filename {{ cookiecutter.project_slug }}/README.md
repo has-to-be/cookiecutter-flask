@@ -6,11 +6,11 @@ Quickstart
 
  1. Install and launch the dockerized service with its dependencies:
 
-        $ docker-compose up -d
+        $ ./do up -d
 
  2. Prepare the database:
 
-        $ docker-compose run --rm web flask db upgrade
+        $ ./do flask db upgrade
 
  3. Verify that the service is up and running by requesting its health check
     endpoint:
@@ -19,7 +19,7 @@ Quickstart
 
  4. Run the test suite:
 
-        $ docker-compose run --rm web pytest
+        $ ./do test
 
 
 Development Notes
