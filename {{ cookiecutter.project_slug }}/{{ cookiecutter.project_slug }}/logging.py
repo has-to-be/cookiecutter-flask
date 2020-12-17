@@ -1,12 +1,24 @@
 """Custom logging functionality."""
 
 import datetime
+import sys
 
 from pythonjsonlogger.jsonlogger import JsonFormatter
 
 
 class CustomJsonFormatter(JsonFormatter):
     """A custom JSON log formatter."""
+
+    def __init__(self, *args, **kwargs):
+        """Initialize a new instance.
+
+        This merely acts as a wrapper to :meth:`JsonFormatter.__init__`,
+        setting the ``validate`` keyword argument (supported since
+        Python 3.8) to *False* if it was not provided.
+        """
+        if sys.version_info >= (3, 8, 0):
+            kwargs.setdefault("validate", False)
+        super().__init__(*args, **kwargs)
 
     def add_fields(self, log_record, record, message_dict):
         """Add custom fields to a log record.
