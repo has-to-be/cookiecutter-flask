@@ -1,7 +1,5 @@
 """Tests for the ``db`` module."""
 
-import re
-
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
