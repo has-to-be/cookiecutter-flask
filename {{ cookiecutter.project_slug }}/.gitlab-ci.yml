@@ -1,5 +1,12 @@
 ---
-image: python:3.6
+default:
+  image: python:3.7
+  before_script:
+    - pip install poetry
+    - poetry config experimental.new-installer false
+    - poetry install
+  tags:
+    - docker
 
 variables:
   POSTGRES_DB: test
@@ -14,89 +21,68 @@ stages:
 
 style:
   stage: style
-  before_script: &setup_dependencies
-    - pip install --user poetry
-    - ~/.local/bin/poetry install
   script:
-    - ~/.local/bin/poetry run black --check --diff {{ cookiecutter.project_slug }} tests
-  tags:
-    - docker
+    - poetry run black --check --diff {{ cookiecutter.project_slug }} tests
 
 complexity:package:
   stage: complexity
-  before_script: *setup_dependencies
   script:
-    - ~/.local/bin/poetry run radon cc {{ cookiecutter.project_slug }} -a -s
-    - ~/.local/bin/poetry run xenon -bB -mA -aA {{ cookiecutter.project_slug }}
-  tags:
-    - docker
+    - poetry run radon cc {{ cookiecutter.project_slug }} -a -s
+    - poetry run xenon -bB -mA -aA {{ cookiecutter.project_slug }}
 
 complexity:tests:
   stage: complexity
-  before_script: *setup_dependencies
   script:
-    - ~/.local/bin/poetry run radon cc tests -a -s
-    - ~/.local/bin/poetry run xenon -bB -mA -aA tests
-  tags:
-    - docker
+    - poetry run radon cc tests -a -s
+    - poetry run xenon -bB -mA -aA tests
 
-test:3.5:
+.test:
   stage: test
-  image: python:3.5
-  services: &service_dependencies
+  services:
     - postgres:11.2
     - selenium/standalone-chrome
-  before_script: *setup_dependencies
-  script: &run_testsuite
+  script:
     - export {{ cookiecutter.project_slug|upper }}_TEST_DB='postgresql://test@postgres/test'
     - export {{ cookiecutter.project_slug|upper }}_SELENIUM_HOST='selenium__standalone-chrome'
     - >-
         export {{ cookiecutter.project_slug|upper }}_LIVETEST_HOST=$(grep -Eio
         '^[0-9\.]*\s+runner-[0-9a-z_-]+-project-[0-9]+-concurrent-[0-9]+'
         /etc/hosts | awk '{ print $1; }')
-    - ~/.local/bin/poetry run pytest
-  coverage: &testsuite_coverage '/^TOTAL\s+(?:\d+\s+)+(\d+(?:\.\d+)?\%)$/'
+    - >-
+        poetry run pytest
+        --junitxml=junit_report.xml
+        --cov-report=xml:coverage.xml
+  coverage: '/^TOTAL.+?(\d+(?:\.\d+)?\%)$/'
   artifacts:
-    name: '$CI_PROJECT_NAME-coverage-$CI_COMMIT_SHORT_SHA-py35'
-    paths: &testsuite_artifacts_paths
+    name: '$CI_PROJECT_NAME-coverage-$CI_COMMIT_SHORT_SHA-$CI_JOB_IMAGE'
+    paths:
       - htmlcov
-  tags:
-    - docker
+    reports:
+      junit: junit_report.xml
+      cobertura: coverage.xml
 
-test:3.6:
-  stage: test
-  services: *service_dependencies
-  before_script: *setup_dependencies
-  script: *run_testsuite
-  coverage: *testsuite_coverage
-  artifacts:
-    name: '$CI_PROJECT_NAME-coverage-$CI_COMMIT_SHORT_SHA-py36'
-    paths: *testsuite_artifacts_paths
-  tags:
-    - docker
+test:py36:
+  extends: .test
+  image: python:3.6
 
-test:3.7:
-  stage: test
+test:py37:
+  extends: .test
   image: python:3.7
-  services: *service_dependencies
-  before_script: *setup_dependencies
-  script: *run_testsuite
-  coverage: *testsuite_coverage
-  artifacts:
-    name: '$CI_PROJECT_NAME-coverage-$CI_COMMIT_SHORT_SHA-py37'
-    paths: *testsuite_artifacts_paths
-  tags:
-    - docker
+
+test:py38:
+  extends: .test
+  image: python:3.8
+
+test:py39:
+  extends: .test
+  image: python:3.9
 
 build:
   stage: build
-  before_script: *setup_dependencies
   script:
-    - ~/.local/bin/poetry build
+    - poetry build
   dependencies: []
   artifacts:
     name: '$CI_PROJECT_NAME-build-$CI_COMMIT_SHORT_SHA'
     paths:
       - dist/
-  tags:
-    - docker
