@@ -1,4 +1,4 @@
-FROM python:3.5
+FROM python:3.7
 
 # Create application directory, and copy local sources into it
 RUN mkdir /usr/src/app
