@@ -45,7 +45,7 @@ class TestCustomJsonFormatter:
         [
             ("levelname", "level"),
             ("name", "logger"),
-            ("pathname", "source"),
+            ("pathname", "source_file"),
             ("funcName", "function"),
         ],
     )
