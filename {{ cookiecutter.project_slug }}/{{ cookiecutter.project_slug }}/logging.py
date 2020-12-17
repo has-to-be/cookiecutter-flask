@@ -58,5 +58,5 @@ class CustomJsonFormatter(JsonFormatter):
 
         add_alias("level", "levelname")
         add_alias("logger", "name")
-        add_alias("source", "pathname")
+        add_alias("source_file", "pathname")
         add_alias("function", "funcName")
