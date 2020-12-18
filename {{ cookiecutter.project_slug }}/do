@@ -82,7 +82,7 @@ def attach():
         encoding="utf-8",
     )
     container_id = result.stdout.strip()
-    print(f'Attaching to service "web".  Press Ctrl-P Ctrl-Q to exit.')
+    print('Attaching to service "web".  Press Ctrl-P Ctrl-Q to exit.')
     return ["docker", "attach", container_id]
 
 
