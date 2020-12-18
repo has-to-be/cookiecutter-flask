@@ -5,6 +5,7 @@ import functools
 import os
 import subprocess
 import sys
+import textwrap
 
 
 tasks = {}
@@ -40,7 +41,15 @@ def launcher(service=None):
 def help(*args):
     """Print a help message."""
     script_name = os.path.basename(__file__)
-    print(f"Usage: {script_name} <command> [<args>...]\n")
+    message = f"""\
+        Usage: {script_name} <command> [<args>...]
+
+        If you enter a command that is not listed below, that command and all
+        its arguments will be executed inside a new ``web`` Docker container.
+
+        Commands:
+    """
+    print(textwrap.dedent(message))
     for task in sorted(tasks):
         description = tasks[task].__doc__.splitlines()[0]
         if len(task) <= 8:
