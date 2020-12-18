@@ -1,6 +1,6 @@
 """Views for the ``main`` blueprint."""
 
-from flask import Response
+from flask import current_app, Response
 
 from .blueprint import main
 
@@ -16,4 +16,5 @@ def index():
 @main.route("/.well-known/healthcheck")
 def healthcheck():
     """Return status information (as JSON), usable for health checks."""
-    return {"status": "OK"}
+    version = current_app.config["SENTRY_RELEASE"]
+    return {"status": "OK", "version": version}
