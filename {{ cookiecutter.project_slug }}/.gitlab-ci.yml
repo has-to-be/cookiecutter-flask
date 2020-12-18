@@ -1,4 +1,8 @@
 ---
+
+# Defaults
+# ========
+
 default:
   image: python:3.7
   before_script:
@@ -13,15 +17,27 @@ variables:
   POSTGRES_USER: test
   POSTGRES_PASSWORD: ''
 
+
+# Stages
+# ======
+
 stages:
   - style
   - test
   - build
 
+
+# Stage: “style”
+# --------------
+
 style:
   stage: style
   script:
     - poetry run pre-commit run -a
+
+# The code complexity jobs do not perform any checks or validations; they are
+# merely generating reports.  Hence, these jobs should never fail—and even if
+# they do, it does not matter for the overall pipeline status.
 
 .complexity:
   stage: style
@@ -38,6 +54,10 @@ complexity:tests:
   extends: .complexity
   variables:
     CHECK_DIR: tests
+
+
+# Stage: “test”
+# --------------
 
 .test:
   stage: test
@@ -79,6 +99,10 @@ test:py38:
 test:py39:
   extends: .test
   image: python:3.9
+
+
+# Stage: “build”
+# --------------
 
 build:
   stage: build
