@@ -1,4 +1,8 @@
 ---
+
+# Defaults
+# ========
+
 default:
   image: python:3.7
   before_script:
@@ -13,28 +17,47 @@ variables:
   POSTGRES_USER: test
   POSTGRES_PASSWORD: ''
 
+
+# Stages
+# ======
+
 stages:
   - style
-  - complexity
   - test
   - build
+
+
+# Stage: “style”
+# --------------
 
 style:
   stage: style
   script:
-    - poetry run black --check --diff {{ cookiecutter.project_slug }} tests
+    - poetry run pre-commit run -a
+
+# The code complexity jobs do not perform any checks or validations; they are
+# merely generating reports.  Hence, these jobs should never fail—and even if
+# they do, it does not matter for the overall pipeline status.
+
+.complexity:
+  stage: style
+  script:
+    - poetry run radon cc $CHECK_DIR -a -s
+  allow_failure: true
 
 complexity:package:
-  stage: complexity
-  script:
-    - poetry run radon cc {{ cookiecutter.project_slug }} -a -s
-    - poetry run xenon -bB -mA -aA {{ cookiecutter.project_slug }}
+  extends: .complexity
+  variables:
+    CHECK_DIR: {{ cookiecutter.project_slug }}
 
 complexity:tests:
-  stage: complexity
-  script:
-    - poetry run radon cc tests -a -s
-    - poetry run xenon -bB -mA -aA tests
+  extends: .complexity
+  variables:
+    CHECK_DIR: tests
+
+
+# Stage: “test”
+# --------------
 
 .test:
   stage: test
@@ -76,6 +99,10 @@ test:py38:
 test:py39:
   extends: .test
   image: python:3.9
+
+
+# Stage: “build”
+# --------------
 
 build:
   stage: build

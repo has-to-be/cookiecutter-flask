@@ -1,34 +1,44 @@
 ---
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: check-toml
+        name: 'TOML Syntax Checking'
+      - id: check-yaml
+        name: 'YAML Syntax Checking'
+      - id: end-of-file-fixer
+        name: 'Final Newline Checking'
+      - id: trailing-whitespace
+        name: 'Trailing Whitespace Checking'
+        args: ['--markdown-linebreak-ext=md']
+        exclude: '.bumpversion.cfg'
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.4
+    hooks:
+      - id: flake8
+        name: 'Flake8 Style Checking'
+        additional_dependencies: [
+          'flake8-docstrings==1.5.0',
+          'flake8-import-order==0.18.1',
+        ]
+
+  - repo: https://github.com/psf/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+        name: 'Black Code Formatting'
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.25.0
+    hooks:
+      - id: yamllint
+        name: 'YAML Style Checking'
+
   - repo: https://github.com/yunojuno/pre-commit-xenon
     rev: v0.1
     hooks:
       - id: xenon
         name: 'Xenon Code Complexity Checking'
         args: ['--max-absolute=B', '--max-modules=A', '--max-average=A']
-        types: [python]
-
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v1.2.3
-    hooks:
-      - id: flake8
-        additional_dependencies: [
-          'flake8-docstrings==1.5.0',
-          'flake8-import-order==0.18.1',
-        ]
-        name: 'Flake8 Style Guide Checking'
-        types: [python]
-
-  - repo: https://github.com/psf/black
-    rev: 19.3b0
-    hooks:
-      - id: black
-        name: 'Black Code Formatting'
-        types: [python]
-
-  - repo: https://github.com/adrienverge/yamllint
-    rev: v1.20.0
-    hooks:
-      - id: yamllint
-        name: 'YAML Linting'
-        types: [yaml]
