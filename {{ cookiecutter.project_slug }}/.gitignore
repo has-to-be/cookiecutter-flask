@@ -14,3 +14,6 @@ __pycache__/
 /.pytest_cache/
 /.tox/
 /htmlcov/
+
+# Local environment file
+/.env
