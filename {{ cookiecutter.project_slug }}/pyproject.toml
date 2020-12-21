@@ -13,8 +13,8 @@ blinker = "^1.4"
 Flask = "^1.0"
 Flask-Migrate = "^2.4"
 Flask-SQLAlchemy = "^2.3"
-raven = "^6.10"
 psycopg2-binary = "^2.8"
+sentry-sdk = {version = "^0.19.5", extras = ["flask"]}
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
