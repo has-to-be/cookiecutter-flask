@@ -87,4 +87,4 @@ only declare services that are used exclusively by this web application in the
 application that contains the shared service, and only the *web* container of
 this application:
 
-    $ docker-compose up web -d
+    $ ./do up web -d
