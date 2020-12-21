@@ -3,10 +3,10 @@
 import os
 
 import pytest
+import sentry_sdk
 
 from ..app import create_app
 from ..config import SECRET_KEY, SESSION_COOKIE_NAME
-from ..sentry import sentry
 
 
 config_envvar = "{{ cookiecutter.project_slug|upper }}_CONFIG"
@@ -193,10 +193,10 @@ def test_create_app_with_conffile_and_envvar_and_kwargs(
 
 def test_create_app_with_sentry_initialization():
     """Test Sentry initialization during app creation."""
-    assert sentry.dsn is None
-    dsn = "http://key@sentry.example.com/project"
+    assert sentry_sdk.Hub.current.client is None
+    dsn = "http://key@sentry.example.com/4711"
     create_app(SENTRY_DSN=dsn)
-    assert sentry.dsn == dsn
+    assert sentry_sdk.Hub.current.client.dsn == dsn
 
 
 def test_create_app_sqlalchemy_echo_default():

@@ -8,12 +8,13 @@ import logging.config
 import os
 import sys
 
+import sentry_sdk
 from flask import Flask
 from flask.logging import default_handler
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 from .db import db, migrate
 from .main import main as main_blueprint
-from .sentry import sentry
 
 
 def create_app(config=None, **kwargs):
@@ -103,7 +104,13 @@ def initialize_extensions(app):
 
     # Configure Sentry integration
     if app.config.get("SENTRY_DSN"):
-        sentry.init_app(app, dsn=app.config["SENTRY_DSN"])
+        release = "{{ cookiecutter.project_slug }}@{SENTRY_RELEASE}".format(**app.config)
+        sentry_sdk.init(
+            dsn=app.config["SENTRY_DSN"],
+            release=release,
+            environment=app.config["SENTRY_ENVIRONMENT"],
+            integrations=[FlaskIntegration()],
+        )
 
 
 def register_blueprints(app):
