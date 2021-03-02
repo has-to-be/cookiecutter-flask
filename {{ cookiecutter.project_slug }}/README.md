@@ -25,6 +25,20 @@ Quickstart
 Development Notes
 -----------------
 
+### Poetry
+
+To install or update dependencies, you must execute `poetry` inside a running
+service container.  From the repository root, run:
+
+    $ ./do poetry [...]
+
+Afterwards, stop the services, and use the `--build` flag to rebuild the
+Docker image with the new dependencies when starting the service again:
+
+    $ ./do stop
+    $ ./do up -d --build
+
+
 ### Git
 
 You can install a Git pre-commit hook that will automatically check the code

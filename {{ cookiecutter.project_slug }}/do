@@ -100,6 +100,12 @@ def test(*args):
     return ["pytest"] + list(args)
 
 
+@launcher()
+def poetry(*args):
+    """Run a ``poetry`` command inside the running ``web`` container."""
+    return ["docker-compose", "exec", "web", "poetry"] + list(args)
+
+
 @launcher("postgres")
 def psql(*args):
     """Run the PostgreSQL command line interface."""
